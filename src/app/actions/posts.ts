@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { 
   CreatePostSchema, 
   UpdatePostSchema, 
@@ -56,7 +57,8 @@ export async function createPost(input: CreatePostInput) {
 export async function updatePost(input: UpdatePostInput) {
   try {
     const validatedData = UpdatePostSchema.parse(input)
-    const { id, categoryIds, tagIds, ...updateData } = validatedData
+    const { id, ...updateData } = validatedData
+    // TODO: Handle categoryIds and tagIds when implementing many-to-many relationships
     
     // TODO: Add authorization check - user can only update their own posts
     
@@ -150,7 +152,7 @@ export async function getPosts(input: Partial<PostQueryInput> = {}) {
     
     const skip = (page - 1) * limit
     
-    const where: any = {}
+    const where: Prisma.PostWhereInput = {}
     
     if (search) {
       where.OR = [
@@ -184,8 +186,9 @@ export async function getPosts(input: Partial<PostQueryInput> = {}) {
       }
     }
     
-    const orderBy: any = {}
-    orderBy[sortBy] = sortOrder
+    const orderBy: Prisma.PostOrderByWithRelationInput = {
+      [sortBy]: sortOrder
+    }
     
     const [posts, totalCount] = await Promise.all([
       prisma.post.findMany({
