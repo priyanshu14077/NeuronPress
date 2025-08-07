@@ -113,7 +113,7 @@ export default function Dashboard() {
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
-            <p className="text-gray-400">Welcome back, Priyanshu! Here's your content overview.</p>
+            <p className="text-gray-400">Welcome back, Priyanshu! Here&apos;s your content overview.</p>
           </div>
           <div className="flex space-x-3">
             <button className="btn-secondary">
